@@ -1,30 +1,38 @@
 extends Node
 
+const SERVER_PORT = 8080
+const SERVER_IP = "127.0.0.1"
+
+var multiplayer_scene = preload("res://scenes/multiplayer_character.tscn")
+var multiplayer_peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+
 @export var _players_spawn_node: Node
 
-var enet_network_scene := preload("res://scenes/enet_network.tscn")
-var active_network
-
-func _build_multiplayer_network() -> void:
-	if not active_network:
-		MultiplayerManager.multiplayer_mode_enabled = true
-		_set_active_network(enet_network_scene)
-
-func _set_active_network(active_network_scene: PackedScene) -> void:
-	var network_scene_initialized = active_network_scene.instantiate()
-	active_network = network_scene_initialized
-	active_network._players_spawn_node = _players_spawn_node
-	add_child(active_network)
-
-func become_host(is_dedicated_server: bool = false) -> void:
-	_build_multiplayer_network()
-	MultiplayerManager.host_mode_enabled = not is_dedicated_server
-	active_network.become_host()
+func become_host() -> void:
+	multiplayer_peer.create_server(SERVER_PORT)
+	multiplayer.multiplayer_peer = multiplayer_peer
 	
-func join_as_client(lobby_id: int = 0) -> void:
-	_build_multiplayer_network()
-	active_network.join_as_client(lobby_id)
+	multiplayer.peer_connected.connect(_add_player_to_game)
+	multiplayer.peer_disconnected.connect(_del_player)
+
+	if not OS.has_feature("dedicated_server"):
+		_add_player_to_game(1)
+
+func join_as_client() -> void:
+	multiplayer_peer.create_client(SERVER_IP, SERVER_PORT)
+	multiplayer.multiplayer_peer = multiplayer_peer
+
+func _add_player_to_game(id: int) -> void:
+	print("Player %s joined the game!" % id)
 	
-func list_lobbies() -> void:
-	_build_multiplayer_network()
-	active_network.list_lobbies()
+	var player_to_add = multiplayer_scene.instantiate()
+	player_to_add.player_id = id
+	player_to_add.name = str(id)
+	
+	_players_spawn_node.add_child(player_to_add, true)
+	
+func _del_player(id: int) -> void:
+	print("Player %s left the game!" % id)
+	if not _players_spawn_node.has_node(str(id)):
+		return
+	_players_spawn_node.get_node(str(id)).queue_free()
