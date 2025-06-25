@@ -1,27 +1,23 @@
 extends Node
 
-const SERVER_PORT = 8080
-const SERVER_IP = "127.0.0.1"
-
 var multiplayer_scene = preload("res://scenes/multiplayer_character.tscn")
 
 @export var _players_spawn_node: Node
 
-func become_host() -> void:
+func start_server(port: int, is_host: bool) -> void:
 	var peer := ENetMultiplayerPeer.new()
-	peer.create_server(SERVER_PORT)
+	peer.create_server(port)
 	multiplayer.multiplayer_peer = peer
 	
 	multiplayer.peer_connected.connect(_add_player_to_game)
 	multiplayer.peer_disconnected.connect(_del_player)
 	
-	# if host
-	if not OS.has_feature("dedicated_server"):
+	if is_host:
 		_add_player_to_game(1)
 
-func join_as_client() -> void:
+func start_client(addr: String, port: int) -> void:
 	var peer := ENetMultiplayerPeer.new()
-	peer.create_client(SERVER_IP, SERVER_PORT)
+	peer.create_client(addr, port)
 	multiplayer.multiplayer_peer = peer
 
 func _add_player_to_game(id: int) -> void:
