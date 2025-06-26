@@ -19,6 +19,4 @@ func _gather() -> void:
 		return
 		
 	input_direction = Input.get_axis("move_left", "move_right")
-
-func _process(delta: float) -> void:
 	input_jump = Input.get_action_strength("jump")
