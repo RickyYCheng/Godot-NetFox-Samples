@@ -13,10 +13,11 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @export var network_id := 1:
 	set(id):
 		network_id = id
-		input.set_multiplayer_authority(id)
+		# NOTE: comment this when using rpc
+		#input.set_multiplayer_authority(id)
 
 @rpc("any_peer", "call_local")
-func on_spawn(id: int) -> void: #NOTE: substitute network_id
+func on_spawn(id: int) -> void:
 	input.set_multiplayer_authority(id)
 
 func _ready() -> void:
