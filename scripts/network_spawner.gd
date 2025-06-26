@@ -35,7 +35,7 @@ func _spawn(id: int) -> void:
 	
 	var node := scene.instantiate()
 	_nodes[id] = node
-	node.network_id = id
+	node.network_id = id # NOTE: must before add_child. why?
 	root.add_child(node, true)
 
 func _despawn(id: int) -> void:
