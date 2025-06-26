@@ -27,6 +27,17 @@ spawn_path = NodePath("../Players")
 
 [node name="Players" type="Node" parent="."]
 
+[node name="Ground" type="Sprite2D" parent="."]
+position = Vector2(192, 216)
+scale = Vector2(6, 1)
+texture = SubResource("GradientTexture2D_sugp2")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Ground"]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground/StaticBody2D"]
+shape = SubResource("RectangleShape2D_0wfyh")
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Button" type="Button" parent="UI"]
@@ -43,16 +54,16 @@ offset_bottom = 31.0
 grow_horizontal = 0
 text = "Join"
 
-[node name="Ground" type="Sprite2D" parent="."]
-position = Vector2(192, 216)
-scale = Vector2(6, 1)
-texture = SubResource("GradientTexture2D_sugp2")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Ground"]
-visible = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground/StaticBody2D"]
-shape = SubResource("RectangleShape2D_0wfyh")
+[node name="Close" type="Button" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -52.0
+offset_right = 52.0
+offset_bottom = 31.0
+grow_horizontal = 2
+text = "Close"
 
 [connection signal="button_down" from="UI/Button" to="." method="_on_host_button_down"]
 [connection signal="button_down" from="UI/Join" to="." method="_on_join_button_down"]
+[connection signal="button_down" from="UI/Close" to="." method="_on_close_button_down"]
