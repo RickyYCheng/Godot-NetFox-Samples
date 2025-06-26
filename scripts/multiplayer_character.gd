@@ -10,9 +10,9 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @export var input: PlayerInput
 
-@export var player_id := 1:
+@export var network_id := 1:
 	set(id):
-		player_id = id
+		network_id = id
 		input.set_multiplayer_authority(id)
 
 func _ready() -> void:

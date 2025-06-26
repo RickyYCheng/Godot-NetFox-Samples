@@ -34,9 +34,9 @@ func _spawn(id: int) -> void:
 	if scene == null: return
 	
 	var node := scene.instantiate()
-	node.player_id = id
-	root.add_child(node, true)
 	_nodes[id] = node
+	node.network_id = id
+	root.add_child(node, true)
 
 func _despawn(id: int) -> void:
 	var node: Node = _nodes.get(id, null)
