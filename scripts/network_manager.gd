@@ -27,14 +27,6 @@ func _on_peer_join(id: int) -> void:
 func _on_peer_leave(id: int) -> void:
 	_clients.erase(id)
 
-func _condition(cond: Callable, timeout: float = 5.0) -> Error:
-	timeout = Time.get_ticks_msec() + timeout * 1000
-	while not cond.call():
-		await get_tree().process_frame
-		if Time.get_ticks_msec() > timeout:
-			return ERR_TIMEOUT
-	return OK
-
 func start_server(port: int, timeout: float = 5.0) -> Error:
 	if connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED: 
 		return ERR_ALREADY_IN_USE
@@ -42,14 +34,15 @@ func start_server(port: int, timeout: float = 5.0) -> Error:
 	_peer.create_server(port)
 	multiplayer.multiplayer_peer = _peer
 	
-	await _condition(func():
-		return connection_status() != MultiplayerPeer.CONNECTION_CONNECTING
-	, timeout)
+	timeout = Time.get_ticks_msec() + timeout * 1000
+	while not connection_status() != MultiplayerPeer.CONNECTION_CONNECTING:
+		await get_tree().process_frame
+		if Time.get_ticks_msec() > timeout:
+			break
 	
 	if connection_status() != MultiplayerPeer.CONNECTION_CONNECTED:
+		close()
 		return ERR_CANT_OPEN
-	
-	await NetworkEvents.on_server_start
 	
 	return OK
 
@@ -60,14 +53,15 @@ func start_client(addr: String, port: int, timeout: float = 5.0) -> Error:
 	_peer.create_client(addr, port)
 	multiplayer.multiplayer_peer = _peer
 	
-	await _condition(func(): 
-		return connection_status() != MultiplayerPeer.CONNECTION_CONNECTING
-	, timeout)
+	timeout = Time.get_ticks_msec() + timeout * 1000
+	while not connection_status() != MultiplayerPeer.CONNECTION_CONNECTING:
+		await get_tree().process_frame
+		if Time.get_ticks_msec() > timeout:
+			break
 	
 	if connection_status() != MultiplayerPeer.CONNECTION_CONNECTED:
+		close()
 		return ERR_CANT_CONNECT
-	
-	await NetworkEvents.on_client_start
 	
 	return OK
 
@@ -83,4 +77,9 @@ func connection_status() -> MultiplayerPeer.ConnectionStatus:
 func clients() -> Array: 
 	return _clients
 
-func close() -> void: _peer.close()
+func close() -> void: 
+	_peer.close()
+
+func until(status: MultiplayerPeer.ConnectionStatus) -> void:
+	while connection_status() != status:
+		await get_tree().process_frame
