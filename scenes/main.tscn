@@ -31,6 +31,7 @@ root = NodePath("../Players")
 metadata/_custom_type_script = "uid://c4l438x6ehiof"
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
 _spawnable_scenes = PackedStringArray("uid://dsuraimo3bxfq")
 spawn_path = NodePath("../Players")
 
