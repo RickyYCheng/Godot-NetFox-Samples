@@ -29,7 +29,7 @@ func _apply_movement_from_input(delta: float, tick: int) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
-	elif input.jump_just_pressed_tick == tick:
+	elif input._jump.z == tick:
 		# Handle jump.
 		velocity.y = JUMP_VELOCITY
 	
