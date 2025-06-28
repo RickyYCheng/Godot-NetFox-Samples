@@ -5,9 +5,9 @@ var move_l := Vector4(0, -1e10, -1e10, -1e10)
 var move_r := Vector4(0, -1e10, -1e10, -1e10)
 var jump := Vector4(0, -1e10, -1e10, -1e10)
 
-var _move_l_buffer := Vector4(0, -1e10, -1e10, -1e10)
-var _move_r_buffer := Vector4(0, -1e10, -1e10, -1e10)
-var _jump_buffer := Vector4(0, -1e10, -1e10, -1e10)
+var _move_l_buffer := move_l
+var _move_r_buffer := move_r
+var _jump_buffer := jump
 
 func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
