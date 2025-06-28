@@ -29,7 +29,7 @@ script = ExtResource("2_53nnd")
 script = ExtResource("3_7l1hk")
 root = NodePath("..")
 state_properties = Array[String]([":global_transform", ":velocity"])
-input_properties = Array[String](["Input:move_lr", "Input:_jump"])
+input_properties = Array[String](["Input:jump", "Input:move_l", "Input:move_r"])
 metadata/_custom_type_script = "uid://d350u8evihs1u"
 
 [node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]

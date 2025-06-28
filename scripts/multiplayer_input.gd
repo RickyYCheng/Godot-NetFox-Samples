@@ -1,10 +1,12 @@
 class_name PlayerInput
 extends Node
 
-var move_lr : float
-
-var _jump : Vector4 = Vector4()
-var _jump_buffer : Vector4 = Vector4()
+var move_l : Vector4
+var _move_l_buffer : Vector4
+var move_r : Vector4
+var _move_r_buffer : Vector4
+var jump : Vector4
+var _jump_buffer : Vector4
 
 func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
@@ -14,26 +16,35 @@ var _samples := 0
 func _process(delta: float) -> void:
 	_samples += 1
 	
-	if Input.is_action_pressed("jump"):
-		_jump_buffer.y = NetworkTime.tick
-	if Input.is_action_just_pressed("jump"):
-		_jump_buffer.z = NetworkTime.tick
-	if Input.is_action_just_released("jump"):
-		_jump_buffer.w = NetworkTime.tick
+	_jump_buffer = _make_buffer(_jump_buffer, "jump")
+	_move_l_buffer = _make_buffer(_move_l_buffer, "move_l")
+	_move_r_buffer = _make_buffer(_move_r_buffer, "move_r")
 
 func _gather() -> void:
 	if not is_multiplayer_authority():
 		return
 	
-	move_lr = Input.get_axis("move_l", "move_r")
-	
-	_jump.y = _jump_buffer.y
-	_jump.z = _jump_buffer.z
-	_jump.w = _jump_buffer.w
+	jump = _gather_from(_jump_buffer)
+	move_l = _gather_from(_move_l_buffer)
+	move_r = _gather_from(_move_r_buffer)
 
 func _reset(delta: float, tick: int) -> void:
 	_samples = 0
 	
-	_jump_buffer.y = 0
-	_jump_buffer.z = 0
-	_jump_buffer.w = 0
+	_jump_buffer = Vector4()
+	_move_l_buffer = Vector4()
+	_move_r_buffer = Vector4()
+
+func _make_buffer(_buffer: Vector4, action: String) -> Vector4:
+	_buffer.x += Input.get_action_strength(action)
+	if Input.is_action_pressed(action):
+		_buffer.y = NetworkTime.tick
+	if Input.is_action_just_pressed(action):
+		_buffer.z = NetworkTime.tick
+	if Input.is_action_just_released(action):
+		_buffer.w = NetworkTime.tick
+	return _buffer
+func _gather_from(_buffer: Vector4) -> Vector4:
+	if _samples > 0:
+		_buffer.x /= _samples
+	return _buffer
