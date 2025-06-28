@@ -1,13 +1,13 @@
 class_name PlayerInput
 extends Node
 
-var move_l : Vector4
-var move_r : Vector4
-var jump : Vector4
+var move_l := Vector4(0, -1e10, -1e10, -1e10)
+var move_r := Vector4(0, -1e10, -1e10, -1e10)
+var jump := Vector4(0, -1e10, -1e10, -1e10)
 
-var _move_l_buffer : Vector4
-var _move_r_buffer : Vector4
-var _jump_buffer : Vector4
+var _move_l_buffer := Vector4(0, -1e10, -1e10, -1e10)
+var _move_r_buffer := Vector4(0, -1e10, -1e10, -1e10)
+var _jump_buffer := Vector4(0, -1e10, -1e10, -1e10)
 
 func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
@@ -32,9 +32,9 @@ func _gather() -> void:
 func _reset(delta: float, tick: int) -> void:
 	_samples = 0
 	
-	_jump_buffer = Vector4()
-	_move_l_buffer = Vector4()
-	_move_r_buffer = Vector4()
+	_jump_buffer.x = 0
+	_move_l_buffer.x = 0
+	_move_r_buffer.x = 0
 
 func _make_buffer(_buffer: Vector4, action: String) -> Vector4:
 	_buffer.x += Input.get_action_strength(action)

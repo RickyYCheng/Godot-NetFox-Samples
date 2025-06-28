@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const SPEED = 130.0
 const JUMP_VELOCITY = -300.0
+const BUFFERED_JUMP_DURATION = .4
 
 @onready var rollback_synchronizer = $RollbackSynchronizer
 
@@ -29,7 +30,7 @@ func _apply_movement_from_input(delta: float, tick: int) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
-	elif input.jump.z == tick:
+	elif input.jump.z + BUFFERED_JUMP_DURATION * NetworkTime.tickrate >= tick:
 		# Handle jump.
 		velocity.y = JUMP_VELOCITY
 	
