@@ -2,10 +2,11 @@ class_name PlayerInput
 extends Node
 
 var move_l : Vector4
-var _move_l_buffer : Vector4
 var move_r : Vector4
-var _move_r_buffer : Vector4
 var jump : Vector4
+
+var _move_l_buffer : Vector4
+var _move_r_buffer : Vector4
 var _jump_buffer : Vector4
 
 func _ready() -> void:
