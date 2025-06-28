@@ -24,12 +24,13 @@ input = NodePath("Input")
 
 [node name="Input" type="Node" parent="."]
 script = ExtResource("2_53nnd")
+action_names = PackedStringArray("move_l", "move_r", "jump")
 
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_7l1hk")
 root = NodePath("..")
 state_properties = Array[String]([":global_transform", ":velocity"])
-input_properties = Array[String](["Input:jump", "Input:move_l", "Input:move_r"])
+input_properties = Array[String](["Input:actions"])
 metadata/_custom_type_script = "uid://d350u8evihs1u"
 
 [node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]

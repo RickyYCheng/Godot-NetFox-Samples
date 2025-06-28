@@ -30,12 +30,12 @@ func _apply_movement_from_input(delta: float, tick: int) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
-	elif input.jump.z + BUFFERED_JUMP_DURATION * NetworkTime.tickrate >= tick:
+	elif input.jump.just_pressed_tick + BUFFERED_JUMP_DURATION * NetworkTime.tickrate >= tick:
 		# Handle jump.
 		velocity.y = JUMP_VELOCITY
 	
 	# Get the input direction: -1, 0, 1
-	var direction = input.move_r.x - input.move_l.x
+	var direction = input.move_r.strength - input.move_l.strength
 	
 	# Apply movement
 	if direction:
