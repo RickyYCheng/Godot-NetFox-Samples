@@ -8,11 +8,6 @@ const _EMPTY_ACTION_DICT := {
 	"just_released_tick": -INF,
 }
 
-<<<<<<< HEAD
-var _move_l_buffer := move_l
-var _move_r_buffer := move_r
-var _jump_buffer := jump
-=======
 @export var action_names: PackedStringArray
 var actions : Dictionary
 var _backup : Dictionary
@@ -20,7 +15,6 @@ var _backup : Dictionary
 func _get(property: StringName) -> Variant:
 	if property not in action_names: return null
 	return actions[property]
->>>>>>> main
 
 func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
