@@ -21,20 +21,20 @@ func _ready() -> void:
 	rollback_synchronizer.process_settings()
 
 func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
-	_apply_movement_from_input(delta)
+	_apply_movement_from_input(delta, tick)
 
-func _apply_movement_from_input(delta: float) -> void:
+func _apply_movement_from_input(delta: float, tick: int) -> void:
 	_force_update_is_on_floor()
 	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
-	elif input.jump.strength > 0:
+	elif input.jump_just_pressed_tick == tick:
 		# Handle jump.
 		velocity.y = JUMP_VELOCITY
 	
 	# Get the input direction: -1, 0, 1
-	var direction = input.move_lr.strength
+	var direction = input.move_lr
 	
 	# Apply movement
 	if direction:
