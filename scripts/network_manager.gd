@@ -83,3 +83,6 @@ func close() -> void:
 func until(status: MultiplayerPeer.ConnectionStatus) -> void:
 	while connection_status() != status:
 		await get_tree().process_frame
+
+func check(status: MultiplayerPeer.ConnectionStatus) -> bool:
+	return connection_status() == status
