@@ -35,7 +35,7 @@ func _apply_movement_from_input(delta: float, tick: int) -> void:
 		velocity.y = JUMP_VELOCITY
 	
 	# Get the input direction: -1, 0, 1
-	var direction = input.move_r.strength - input.move_l.strength
+	var direction = input.move_lr
 	
 	# Apply movement
 	if direction:

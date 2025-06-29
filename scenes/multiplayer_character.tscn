@@ -1,9 +1,31 @@
-[gd_scene load_steps=8 format=3 uid="uid://dsuraimo3bxfq"]
+[gd_scene load_steps=13 format=3 uid="uid://dsuraimo3bxfq"]
 
 [ext_resource type="Script" uid="uid://v6ew3iow8630" path="res://scripts/multiplayer_character.gd" id="1_j0nil"]
 [ext_resource type="Script" uid="uid://xoultvq8rp5x" path="res://scripts/multiplayer_input.gd" id="2_53nnd"]
 [ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="3_7l1hk"]
+[ext_resource type="Script" uid="uid://cxictududyctu" path="res://scripts/StringTuple2.gd" id="3_cts7s"]
 [ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="4_bmxv2"]
+[ext_resource type="Script" uid="uid://b28kjafanp5rv" path="res://scripts/StringTuple4.gd" id="4_slqsq"]
+
+[sub_resource type="Resource" id="Resource_slqsq"]
+script = ExtResource("3_cts7s")
+neg = "move_l"
+pos = "move_r"
+metadata/_custom_type_script = "uid://cxictududyctu"
+
+[sub_resource type="Resource" id="Resource_514yr"]
+script = ExtResource("3_cts7s")
+neg = "move_d"
+pos = "move_u"
+metadata/_custom_type_script = "uid://cxictududyctu"
+
+[sub_resource type="Resource" id="Resource_1m6up"]
+script = ExtResource("4_slqsq")
+neg_x = "move_l"
+pos_x = "move_r"
+neg_y = "move_d"
+pos_y = "move_u"
+metadata/_custom_type_script = "uid://b28kjafanp5rv"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bmxv2"]
 resource_local_to_scene = true
@@ -24,7 +46,14 @@ input = NodePath("Input")
 
 [node name="Input" type="Node" parent="."]
 script = ExtResource("2_53nnd")
-action_names = PackedStringArray("move_l", "move_r", "jump")
+action_names = ["move_l", "move_r", "move_u", "move_d", "jump"]
+axes = Dictionary[String, ExtResource("3_cts7s")]({
+"move_lr": SubResource("Resource_slqsq"),
+"move_ud": SubResource("Resource_514yr")
+})
+vectors = Dictionary[String, ExtResource("4_slqsq")]({
+"move": SubResource("Resource_1m6up")
+})
 
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_7l1hk")

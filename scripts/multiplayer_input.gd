@@ -8,13 +8,29 @@ const _EMPTY_ACTION_DICT := {
 	"just_released_tick": -INF,
 }
 
-@export var action_names: PackedStringArray
+@export var action_names: PackedStringArray = []
+@export var axes: Dictionary[String, StringTuple2] = {}
+@export var vectors: Dictionary[String, StringTuple4] = {}
+
 var actions : Dictionary
 var _backup : Dictionary
 
 func _get(property: StringName) -> Variant:
-	if property not in action_names: return null
-	return actions[property]
+	if property in action_names: 
+		return actions[property]
+	elif property in axes:
+		var neg := axes[property].neg
+		var pos := axes[property].pos
+		return actions[pos].strength - actions[neg].strength
+	elif property in vectors:
+		var neg_x := vectors[property].neg_x
+		var pos_x := vectors[property].pos_x
+		var neg_y := vectors[property].neg_y
+		var pos_y := vectors[property].pos_y
+		var x : float = actions[pos_x].strength - actions[neg_x].strength
+		var y : float = actions[pos_y].strength - actions[neg_y].strength
+		return Vector2(x, y).normalized()
+	return null
 
 func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
