@@ -11,12 +11,10 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @export var input: PlayerInput
 
-var network_id := 1
-
-@rpc("any_peer", "call_local")
-func _spawn(id: int) -> void:
-	network_id = id
-	input.set_multiplayer_authority(id)
+var network_id := 1:
+	set(id):
+		network_id = id
+		input.set_multiplayer_authority(id)
 
 func _ready() -> void:
 	rollback_synchronizer.process_settings()
