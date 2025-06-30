@@ -62,7 +62,8 @@ vectors = Dictionary[String, ExtResource("4_slqsq")]({
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_7l1hk")
 root = NodePath("..")
-state_properties = Array[String]([":global_transform", ":velocity"])
+state_properties = Array[String]([":global_transform", ":velocity", ":state_chart_save", ":test_str"])
+full_state_interval = 1
 input_properties = Array[String](["Input:actions"])
 metadata/_custom_type_script = "uid://d350u8evihs1u"
 
@@ -113,5 +114,7 @@ text = "0"
 
 [connection signal="event_received" from="StateChart" to="." method="_on_state_chart_event_received"]
 [connection signal="state_stepped" from="StateChart/Root" to="." method="_on_root_state_stepped"]
+[connection signal="state_entered" from="StateChart/Root/StateA" to="." method="_on_state_a_state_entered"]
 [connection signal="state_stepped" from="StateChart/Root/StateA" to="." method="_on_state_a_state_stepped"]
+[connection signal="state_entered" from="StateChart/Root/StateB" to="." method="_on_state_b_state_entered"]
 [connection signal="state_stepped" from="StateChart/Root/StateB" to="." method="_on_state_b_state_stepped"]

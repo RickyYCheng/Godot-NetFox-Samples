@@ -40,6 +40,9 @@ func _spawn(id: int) -> void:
 
 func _ready() -> void:
 	rollback_synchronizer.process_settings()
+	test = Resource.new()
+	test.set_meta("foo", 0)
+	test_str = var_to_str(test)
 
 var tick : int
 func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
@@ -81,14 +84,23 @@ func _force_update_is_on_floor() -> void:
 	velocity = old_velocity
 
 @onready var label: Label = $Label
+var test : Resource
+var test_str : String
+
+func _on_state_a_state_entered() -> void:
+	test = str_to_var(test_str)
+	test.set_meta("foo", 0)
+	test_str = var_to_str(test)
+
 func _on_state_a_state_stepped() -> void:
-	label.text = str(int(label.text) + 1)
-	
 	if input.jump.just_pressed_tick == tick:
 		state_chart.send_event("to_state_b")
 
+func _on_state_b_state_entered() -> void:
+	test = str_to_var(test_str)
+	test.set_meta("foo", 1)
+	test_str = var_to_str(test)
+
 func _on_state_b_state_stepped() -> void:
-	label.text = str(int(label.text) - 1)
-	
 	if input.jump.just_pressed_tick == tick:
 		state_chart.send_event("to_state_a")
