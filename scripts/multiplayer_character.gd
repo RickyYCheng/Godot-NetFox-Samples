@@ -6,6 +6,26 @@ const BUFFERED_JUMP_DURATION = .4
 
 @onready var rollback_synchronizer = $RollbackSynchronizer
 
+#region: state-chart and its save & load
+@onready var state_chart: StateChart = $StateChart
+@onready var state_chart_save := _serialized_state_chart()
+
+func _serialized_state_chart() -> SerializedStateChart:
+	if not state_chart._state.active: return null
+	return StateChartSerializer.serialize(state_chart)
+
+func _save() -> void:
+	var save := _serialized_state_chart()
+	if save == null: return
+	state_chart_save = save
+
+func _load() -> void:
+	if state_chart_save == null: return
+	StateChartSerializer.deserialize(state_chart_save, state_chart)
+	if state_chart._state == null: return
+
+#endregion
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -21,8 +41,15 @@ func _spawn(id: int) -> void:
 func _ready() -> void:
 	rollback_synchronizer.process_settings()
 
+var tick : int
 func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
+	self.tick = tick
+	
 	_apply_movement_from_input(delta, tick)
+	
+	_load()
+	state_chart.step()
+	_save()
 
 func _apply_movement_from_input(delta: float, tick: int) -> void:
 	_force_update_is_on_floor()
@@ -52,3 +79,16 @@ func _force_update_is_on_floor() -> void:
 	velocity = Vector2.ZERO
 	move_and_slide()
 	velocity = old_velocity
+
+@onready var label: Label = $Label
+func _on_state_a_state_stepped() -> void:
+	label.text = str(int(label.text) + 1)
+	
+	if input.jump.just_pressed_tick == tick:
+		state_chart.send_event("to_state_b")
+
+func _on_state_b_state_stepped() -> void:
+	label.text = str(int(label.text) - 1)
+	
+	if input.jump.just_pressed_tick == tick:
+		state_chart.send_event("to_state_a")

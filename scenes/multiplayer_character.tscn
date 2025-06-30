@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dsuraimo3bxfq"]
+[gd_scene load_steps=17 format=3 uid="uid://dsuraimo3bxfq"]
 
 [ext_resource type="Script" uid="uid://v6ew3iow8630" path="res://scripts/multiplayer_character.gd" id="1_j0nil"]
 [ext_resource type="Script" uid="uid://xoultvq8rp5x" path="res://scripts/multiplayer_input.gd" id="2_53nnd"]
@@ -6,6 +6,10 @@
 [ext_resource type="Script" uid="uid://cxictududyctu" path="res://scripts/StringTuple2.gd" id="3_cts7s"]
 [ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="4_bmxv2"]
 [ext_resource type="Script" uid="uid://b28kjafanp5rv" path="res://scripts/StringTuple4.gd" id="4_slqsq"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="7_b7r0k"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="8_1m6up"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="8_6ukjy"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="9_6ukjy"]
 
 [sub_resource type="Resource" id="Resource_slqsq"]
 script = ExtResource("3_cts7s")
@@ -73,3 +77,41 @@ shape = SubResource("RectangleShape2D_bmxv2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("GradientTexture2D_cts7s")
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("7_b7r0k")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("8_1m6up")
+initial_state = NodePath("StateA")
+
+[node name="ToStateA" type="Node" parent="StateChart/Root"]
+script = ExtResource("8_6ukjy")
+to = NodePath("../StateA")
+event = &"to_state_a"
+delay_in_seconds = "0.0"
+
+[node name="ToStateB" type="Node" parent="StateChart/Root"]
+script = ExtResource("8_6ukjy")
+to = NodePath("../StateB")
+event = &"to_state_b"
+delay_in_seconds = "0.0"
+
+[node name="StateA" type="Node" parent="StateChart/Root"]
+script = ExtResource("9_6ukjy")
+
+[node name="StateB" type="Node" parent="StateChart/Root"]
+script = ExtResource("9_6ukjy")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -19.0
+offset_top = -43.0
+offset_right = 21.0
+offset_bottom = -20.0
+text = "0"
+
+[connection signal="event_received" from="StateChart" to="." method="_on_state_chart_event_received"]
+[connection signal="state_stepped" from="StateChart/Root" to="." method="_on_root_state_stepped"]
+[connection signal="state_stepped" from="StateChart/Root/StateA" to="." method="_on_state_a_state_stepped"]
+[connection signal="state_stepped" from="StateChart/Root/StateB" to="." method="_on_state_b_state_stepped"]
