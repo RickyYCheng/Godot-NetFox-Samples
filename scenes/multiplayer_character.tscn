@@ -36,6 +36,11 @@ properties/0/path = NodePath(".:network_id")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bmxv2"]
+properties/0/path = NodePath(".:network_id")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bmxv2"]
 resource_local_to_scene = true
 size = Vector2(20, 40)
@@ -66,6 +71,9 @@ vectors = Dictionary[String, ExtResource("4_slqsq")]({
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_b7r0k")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_bmxv2")
 
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_7l1hk")
