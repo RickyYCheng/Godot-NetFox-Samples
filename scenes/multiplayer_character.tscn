@@ -87,6 +87,7 @@ shape = SubResource("RectangleShape2D_bmxv2")
 texture = SubResource("GradientTexture2D_cts7s")
 
 [node name="StateChart" type="Node" parent="."]
+process_mode = 4
 script = ExtResource("7_b7r0k")
 metadata/_custom_type_script = "uid://couw105c3bde4"
 
@@ -111,3 +112,6 @@ script = ExtResource("9_6ukjy")
 
 [node name="StateB" type="Node" parent="StateChart/Root"]
 script = ExtResource("9_6ukjy")
+
+[connection signal="state_stepped" from="StateChart/Root/StateA" to="." method="_on_state_a_state_stepped"]
+[connection signal="state_stepped" from="StateChart/Root/StateB" to="." method="_on_state_b_state_stepped"]

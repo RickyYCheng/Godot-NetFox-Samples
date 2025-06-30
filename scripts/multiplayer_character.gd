@@ -77,3 +77,16 @@ func _force_update_is_on_floor() -> void:
 	velocity = Vector2.ZERO
 	move_and_slide()
 	velocity = old_velocity
+
+
+func _on_state_a_state_stepped() -> void:
+	print("A")
+	
+	if input.jump.just_pressed_tick == tick:
+		state_chart.send_event("to_state_b")
+
+func _on_state_b_state_stepped() -> void:
+	print("B")
+	
+	if input.jump.just_pressed_tick == tick:
+		state_chart.send_event("to_state_a")
