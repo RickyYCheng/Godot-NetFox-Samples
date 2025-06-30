@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://v6ew3iow8630" path="res://scripts/multiplayer_character.gd" id="1_j0nil"]
 [ext_resource type="Script" uid="uid://xoultvq8rp5x" path="res://scripts/multiplayer_input.gd" id="2_53nnd"]
 [ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="3_7l1hk"]
-[ext_resource type="Script" uid="uid://cxictududyctu" path="res://scripts/StringTuple2.gd" id="3_cts7s"]
+[ext_resource type="Script" path="res://scripts/StringTuple2.gd" id="3_cts7s"]
 [ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="4_bmxv2"]
-[ext_resource type="Script" uid="uid://b28kjafanp5rv" path="res://scripts/StringTuple4.gd" id="4_slqsq"]
+[ext_resource type="Script" path="res://scripts/StringTuple4.gd" id="4_slqsq"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="7_b7r0k"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="8_1m6up"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="8_6ukjy"]
@@ -62,8 +62,7 @@ vectors = Dictionary[String, ExtResource("4_slqsq")]({
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_7l1hk")
 root = NodePath("..")
-state_properties = Array[String]([":global_transform", ":velocity", ":state_chart_save", ":test_str"])
-full_state_interval = 1
+state_properties = Array[String]([":global_transform", ":velocity", ":state_chart_save"])
 input_properties = Array[String](["Input:actions"])
 metadata/_custom_type_script = "uid://d350u8evihs1u"
 
@@ -104,13 +103,6 @@ script = ExtResource("9_6ukjy")
 
 [node name="StateB" type="Node" parent="StateChart/Root"]
 script = ExtResource("9_6ukjy")
-
-[node name="Label" type="Label" parent="."]
-offset_left = -19.0
-offset_top = -43.0
-offset_right = 21.0
-offset_bottom = -20.0
-text = "0"
 
 [connection signal="event_received" from="StateChart" to="." method="_on_state_chart_event_received"]
 [connection signal="state_stepped" from="StateChart/Root" to="." method="_on_root_state_stepped"]

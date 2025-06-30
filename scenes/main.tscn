@@ -25,6 +25,7 @@ metadata/_custom_type_script = "uid://bwnixbfh182w7"
 
 [node name="NetworkSpawner" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_sugp2")
+host_spawn = true
 scene = ExtResource("4_jyhfs")
 root = NodePath("../Players")
 metadata/_custom_type_script = "uid://c4l438x6ehiof"
