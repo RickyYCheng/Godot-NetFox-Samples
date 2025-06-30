@@ -80,13 +80,13 @@ func _force_update_is_on_floor() -> void:
 
 
 func _on_state_a_state_stepped() -> void:
-	print("A")
+	$Label.text = "State A"
 	
 	if input.jump.just_pressed_tick == tick:
 		state_chart.send_event("to_state_b")
 
 func _on_state_b_state_stepped() -> void:
-	print("B")
+	$Label.text = "State B"
 	
 	if input.jump.just_pressed_tick == tick:
 		state_chart.send_event("to_state_a")
