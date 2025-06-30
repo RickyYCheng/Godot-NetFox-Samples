@@ -45,8 +45,7 @@ func _spawn(id: int) -> void:
 	_nodes[id] = node
 	root.add_child(node, true)
 	
-	if node.has_method("_spawn"):
-		node._spawn.rpc(id)
+	node.network_id = id
 
 # NetworkEvents.on_peer_join calls only on server
 # MultiplayerSpawner will spawn peers on clients
