@@ -111,10 +111,3 @@ script = ExtResource("9_6ukjy")
 
 [node name="StateB" type="Node" parent="StateChart/Root"]
 script = ExtResource("9_6ukjy")
-
-[connection signal="event_received" from="StateChart" to="." method="_on_state_chart_event_received"]
-[connection signal="state_stepped" from="StateChart/Root" to="." method="_on_root_state_stepped"]
-[connection signal="state_entered" from="StateChart/Root/StateA" to="." method="_on_state_a_state_entered"]
-[connection signal="state_stepped" from="StateChart/Root/StateA" to="." method="_on_state_a_state_stepped"]
-[connection signal="state_entered" from="StateChart/Root/StateB" to="." method="_on_state_b_state_entered"]
-[connection signal="state_stepped" from="StateChart/Root/StateB" to="." method="_on_state_b_state_stepped"]
