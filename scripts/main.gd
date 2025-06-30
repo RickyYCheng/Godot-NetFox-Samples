@@ -4,7 +4,7 @@ func _on_host_button_down() -> void:
 	$UI/Host.hide()
 	$UI/Join.hide()
 	
-	await %NetworkManager.start_server(8877, true)
+	await %NetworkManager.start_server(8877)
 	await %NetworkManager.until(MultiplayerPeer.CONNECTION_DISCONNECTED)
 	
 	$UI/Host.show()
