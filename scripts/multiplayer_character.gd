@@ -78,6 +78,10 @@ func _force_update_is_on_floor() -> void:
 	move_and_slide()
 	velocity = old_velocity
 
+var state_a_active:
+	get(): return state_chart_save.state.children[0].active
+var state_b_active:
+	get(): return state_chart_save.state.children[1].active
 
 func _on_state_a_state_stepped() -> void:
 	$Label.text = "State A"
