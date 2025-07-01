@@ -1,8 +1,6 @@
 class_name PlayerInput
 extends Node
 
-signal predict(tick: int)
-
 const _EMPTY_ACTION_DICT := {
 	"strength": 0,
 	"pressed_tick": -INF, # FIXME: maybe use int
@@ -71,7 +69,12 @@ func _predict(tick: int) -> void:
 		# Not predicting, nothing to do
 		return
 	
-	predict.emit(tick)
+	# ATTENTION: not recommend 
+	# you should sync all the states modified in your state-chart
+	# _predict should only handle input
+	
+	#owner.tick = tick
+	#owner.state_chart.step()
 
 func _reset(delta: float, tick: int) -> void:
 	_samples = 0

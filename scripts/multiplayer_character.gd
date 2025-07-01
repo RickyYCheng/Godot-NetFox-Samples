@@ -38,6 +38,7 @@ var network_id := 1:
 
 func _ready() -> void:
 	rollback_synchronizer.process_settings()
+	_save.call_deferred()
 
 var tick : int
 # ATTENTION: The _rollback_tick on the client side only executes owned nodes  
@@ -54,10 +55,11 @@ func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
 	
 	_apply_movement_from_input(delta, tick)
 	
-	#TODO: maybe enable save only on server
-	_load()
+	_load() # could conditionally _load()
 	state_chart.step()
 	_save()
+	# NOTE: will mess up everything
+	# if multiplayer.is_server(): _save()
 
 func _apply_movement_from_input(delta: float, tick: int) -> void:
 	_force_update_is_on_floor()
@@ -105,7 +107,3 @@ func _on_state_b_state_stepped() -> void:
 	
 	if (tick / 60) % 2 != 0:
 		state_chart.send_event("to_state_a")
-
-func _on_input_predict(tick: int) -> void:
-	self.tick = tick
-	state_chart.step()
