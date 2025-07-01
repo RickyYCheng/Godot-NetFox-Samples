@@ -66,7 +66,8 @@ func _gather() -> void:
 		actions[action].strength /= _samples
 
 func _predict(tick: int) -> void:
-	if not owner.rollback_synchronizer.is_predicting():
+	if not owner.rollback_synchronizer.enable_prediction \
+		or not owner.rollback_synchronizer.is_predicting():
 		# Not predicting, nothing to do
 		return
 	

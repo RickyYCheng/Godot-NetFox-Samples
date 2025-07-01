@@ -107,6 +107,5 @@ func _on_state_b_state_stepped() -> void:
 		state_chart.send_event("to_state_a")
 
 func _on_input_predict(tick: int) -> void:
-	prints(rollback_synchronizer.enable_prediction, rollback_synchronizer.is_predicting())
 	self.tick = tick
 	state_chart.step()
