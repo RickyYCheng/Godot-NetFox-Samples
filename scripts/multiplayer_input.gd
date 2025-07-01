@@ -16,7 +16,7 @@ var actions : Dictionary
 var _backup : Dictionary
 
 func _get(property: StringName) -> Variant:
-	if property in action_names: 
+	if property in actions: 
 		return actions[property]
 	elif property in axes:
 		var neg := axes[property].neg
@@ -38,6 +38,7 @@ func _ready() -> void:
 	
 	for action in action_names:
 		_backup[action] = _EMPTY_ACTION_DICT.duplicate(true)
+	actions = _backup.duplicate(true) # deep clone
 
 var _samples := 0
 func _process(delta: float) -> void:

@@ -70,6 +70,7 @@ replication_config = SubResource("SceneReplicationConfig_b7r0k")
 [node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
 script = ExtResource("3_7l1hk")
 root = NodePath("..")
+enable_prediction = true
 state_properties = Array[String]([":global_transform", ":velocity", ":state_chart_save"])
 input_properties = Array[String](["Input:actions"])
 metadata/_custom_type_script = "uid://d350u8evihs1u"
