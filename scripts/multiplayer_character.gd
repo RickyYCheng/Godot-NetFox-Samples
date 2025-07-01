@@ -55,9 +55,9 @@ func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
 	
 	_apply_movement_from_input(delta, tick)
 	
-	_load()
+	if not multiplayer.is_server(): _load()
 	state_chart.step()
-	_save()
+	if multiplayer.is_server(): _save()
 
 func _apply_movement_from_input(delta: float, tick: int) -> void:
 	_force_update_is_on_floor()
