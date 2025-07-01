@@ -1,6 +1,8 @@
 class_name PlayerInput
 extends Node
 
+signal predict(tick: int)
+
 const _EMPTY_ACTION_DICT := {
 	"strength": 0,
 	"pressed_tick": -INF, # FIXME: maybe use int
@@ -35,6 +37,7 @@ func _get(property: StringName) -> Variant:
 func _ready() -> void:
 	NetworkTime.before_tick_loop.connect(_gather)
 	NetworkTime.after_tick.connect(_reset)
+	NetworkRollback.after_prepare_tick.connect(_predict)
 	
 	for action in action_names:
 		_backup[action] = _EMPTY_ACTION_DICT.duplicate(true)
@@ -61,6 +64,13 @@ func _gather() -> void:
 	for action in action_names:
 		if _samples == 0: continue
 		actions[action].strength /= _samples
+
+func _predict(tick: int) -> void:
+	if not owner.rollback_synchronizer.is_predicting():
+		# Not predicting, nothing to do
+		return
+	
+	predict.emit(tick)
 
 func _reset(delta: float, tick: int) -> void:
 	_samples = 0

@@ -40,11 +40,21 @@ func _ready() -> void:
 	rollback_synchronizer.process_settings()
 
 var tick : int
+# ATTENTION: The _rollback_tick on the client side only executes owned nodes  
+# If other nodes need to be executed, use _predict instead: because we need to predict inputs, which is undeniable  
+# The same applies to the state machine. If we need to execute a state machine not owned by the current client,  
+# we also need _predict, since we don't know the inputs of non-owned nodes.  
+# In this example, we did not synchronize Label:text but instead synchronized the state of the state machine.  
+# On the client side, we executed the owned state machine via _rollback_tick  
+# and executed the non-owned state machine via _predict.  
+# In this example, for simplicity, the state machine's state requires no input, so we didn't need to predict inputs.  
+# NOTE: Obviously, _predict won't execute when there are inputs, so the best approach is to directly synchronize the state.
 func _rollback_tick(delta: float, tick: int, is_fresh: bool) -> void:
 	self.tick = tick
 	
 	_apply_movement_from_input(delta, tick)
 	
+	#TODO: maybe enable save only on server
 	_load()
 	state_chart.step()
 	_save()
@@ -81,11 +91,22 @@ func _force_update_is_on_floor() -> void:
 func _on_state_a_state_stepped() -> void:
 	$Label.text = "State A"
 	
-	if input.jump.just_pressed_tick == tick:
+	#if not multiplayer.is_server() and not input.is_multiplayer_authority():
+		#print(tick)
+	
+	if (tick / 60) % 2 == 0:
 		state_chart.send_event("to_state_b")
 
 func _on_state_b_state_stepped() -> void:
 	$Label.text = "State B"
 	
-	if input.jump.just_pressed_tick == tick:
+	#if not multiplayer.is_server() and not input.is_multiplayer_authority():
+		#print(tick)
+	
+	if (tick / 60) % 2 != 0:
 		state_chart.send_event("to_state_a")
+
+func _on_input_predict(tick: int) -> void:
+	prints(rollback_synchronizer.enable_prediction, rollback_synchronizer.is_predicting())
+	self.tick = tick
+	state_chart.step()
