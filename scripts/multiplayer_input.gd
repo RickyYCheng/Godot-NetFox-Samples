@@ -38,6 +38,7 @@ func _ready() -> void:
 	
 	for action in action_names:
 		_backup[action] = _EMPTY_ACTION_DICT.duplicate(true)
+	actions = _backup.duplicate(true)
 
 var _samples := 0
 func _process(delta: float) -> void:
